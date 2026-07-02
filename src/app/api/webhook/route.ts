@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { LineBotClient, validateSignature, webhook, messagingApi } from "@line/bot-sdk";
+import { fetchFaqs } from "@/lib/faq";
+import { generateFaqResponse } from "@/lib/openai";
+import { supabase } from "@/lib/supabase";
 
 const channelSecret = process.env.LINE_CHANNEL_SECRET!;
+const ownerLineUserId = process.env.OWNER_LINE_USER_ID!;
 
 export async function POST(req: NextRequest) {
   try {
@@ -18,10 +22,10 @@ export async function POST(req: NextRequest) {
       channelAccessToken: process.env.LINE_CHANNEL_ACCESS_TOKEN!,
     });
 
+    const faqs = await fetchFaqs();
+
     await Promise.all(
       events.map(async (event) => {
-        console.log('userId:', event.source?.userId);
-
         if (
           event.type !== "message" ||
           event.message.type !== "text" ||
@@ -30,15 +34,54 @@ export async function POST(req: NextRequest) {
           return;
         }
 
-        const replyMessage: messagingApi.TextMessage = {
-          type: "text",
-          text: event.message.text,
-        };
+        const userId = event.source?.userId ?? "unknown";
+        const userMessage = event.message.text;
 
-        await client.replyMessage({
-          replyToken: event.replyToken,
-          messages: [replyMessage],
-        });
+        try {
+          const { answer, confidence } = await generateFaqResponse(
+            userMessage,
+            faqs
+          );
+
+          const replyMessage: messagingApi.TextMessage = {
+            type: "text",
+            text: answer,
+          };
+
+          await client.replyMessage({
+            replyToken: event.replyToken!,
+            messages: [replyMessage],
+          });
+
+          const isResolved = confidence !== "low";
+
+          const { error: insertError } = await supabase
+            .from("conversations")
+            .insert({
+              line_user_id: userId,
+              user_message: userMessage,
+              bot_reply: answer,
+              is_resolved: isResolved,
+            });
+
+          if (insertError) {
+            console.error("Failed to record conversation:", insertError);
+          }
+
+          if (confidence === "low") {
+            await client.pushMessage({
+              to: ownerLineUserId,
+              messages: [
+                {
+                  type: "text",
+                  text: `未回答の質問があります\n質問: ${userMessage}\nユーザーID: ${userId}`,
+                },
+              ],
+            });
+          }
+        } catch (eventError) {
+          console.error("Failed to handle event:", eventError);
+        }
       })
     );
 
