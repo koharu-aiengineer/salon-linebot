@@ -20,6 +20,8 @@ export async function POST(req: NextRequest) {
 
     await Promise.all(
       events.map(async (event) => {
+        console.log('userId:', event.source?.userId);
+
         if (
           event.type !== "message" ||
           event.message.type !== "text" ||
