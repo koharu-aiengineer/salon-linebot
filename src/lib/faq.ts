@@ -15,6 +15,7 @@ export async function fetchFaqs(): Promise<FaqItem[]> {
     .eq("is_active", true);
 
   if (error) {
+    console.error("Failed to fetch faqs:", error);
     throw new Error(`Failed to fetch faqs: ${error.message}`);
   }
 
