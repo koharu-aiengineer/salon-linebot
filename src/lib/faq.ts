@@ -11,7 +11,7 @@ export interface FaqItem {
 export async function fetchFaqs(): Promise<FaqItem[]> {
   const { data, error } = await supabase
     .from("faqs")
-    .select("id, question, answer, category, price_note")
+    .select("*")
     .eq("is_active", true);
 
   if (error) {
