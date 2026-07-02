@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
               messages: [
                 {
                   type: "text",
-                  text: `未回答の質問があります\n質問: ${userMessage}\nユーザーID: ${userId}`,
+                  text: `【未回答の質問があります】\n質問内容: ${userMessage}\n\n詳細はSupabase管理画面でご確認ください。`,
                 },
               ],
             });
