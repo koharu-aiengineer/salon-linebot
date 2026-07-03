@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { validateSignature, webhook, messagingApi } from "@line/bot-sdk";
 import { fetchFaqs } from "@/lib/faq";
 import { lineClient } from "@/lib/line";
+import { fetchMenus } from "@/lib/menu";
 import { generateFaqResponse } from "@/lib/openai";
 import { supabase } from "@/lib/supabase";
 
@@ -19,7 +20,7 @@ export async function POST(req: NextRequest) {
 
     const { events }: { events: webhook.Event[] } = JSON.parse(body);
 
-    const faqs = await fetchFaqs();
+    const [faqs, menus] = await Promise.all([fetchFaqs(), fetchMenus()]);
 
     await Promise.all(
       events.map(async (event) => {
@@ -37,7 +38,8 @@ export async function POST(req: NextRequest) {
         try {
           const { answer, confidence } = await generateFaqResponse(
             userMessage,
-            faqs
+            faqs,
+            menus
           );
 
           console.log('confidence:', confidence, 'message:', userMessage);
