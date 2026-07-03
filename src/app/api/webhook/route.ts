@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { LineBotClient, validateSignature, webhook, messagingApi } from "@line/bot-sdk";
+import { validateSignature, webhook, messagingApi } from "@line/bot-sdk";
 import { fetchFaqs } from "@/lib/faq";
+import { lineClient } from "@/lib/line";
 import { generateFaqResponse } from "@/lib/openai";
 import { supabase } from "@/lib/supabase";
 
@@ -17,10 +18,6 @@ export async function POST(req: NextRequest) {
     }
 
     const { events }: { events: webhook.Event[] } = JSON.parse(body);
-
-    const client = LineBotClient.fromChannelAccessToken({
-      channelAccessToken: process.env.LINE_CHANNEL_ACCESS_TOKEN!,
-    });
 
     const faqs = await fetchFaqs();
 
@@ -50,7 +47,7 @@ export async function POST(req: NextRequest) {
             text: answer,
           };
 
-          await client.replyMessage({
+          await lineClient.replyMessage({
             replyToken: event.replyToken!,
             messages: [replyMessage],
           });
@@ -71,7 +68,7 @@ export async function POST(req: NextRequest) {
           }
 
           if (confidence === "low") {
-            await client.pushMessage({
+            await lineClient.pushMessage({
               to: ownerLineUserId,
               messages: [
                 {

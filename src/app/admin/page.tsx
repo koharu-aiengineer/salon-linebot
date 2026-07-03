@@ -66,6 +66,13 @@ export default function AdminFaqListPage() {
   return (
     <main className="min-h-screen bg-[#F9FAFB] p-4">
       <div className="mx-auto max-w-2xl">
+        <Link
+          href="/admin/broadcast"
+          className="mb-6 flex h-11 w-full items-center justify-center rounded-md bg-[#06C755] px-4 text-sm font-semibold text-white"
+        >
+          お知らせを送る
+        </Link>
+
         <div className="mb-6 flex items-center justify-between">
           <h1 className="text-xl font-bold text-[#111827]">FAQ一覧</h1>
           <Link
