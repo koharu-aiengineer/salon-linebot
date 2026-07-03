@@ -68,9 +68,16 @@ export default function AdminFaqListPage() {
       <div className="mx-auto max-w-2xl">
         <Link
           href="/admin/broadcast"
-          className="mb-6 flex h-11 w-full items-center justify-center rounded-md bg-[#06C755] px-4 text-sm font-semibold text-white"
+          className="mb-3 flex h-11 w-full items-center justify-center rounded-md bg-[#06C755] px-4 text-sm font-semibold text-white"
         >
           お知らせを送る
+        </Link>
+
+        <Link
+          href="/admin/menus"
+          className="mb-6 flex h-11 w-full items-center justify-center rounded-md border border-[#06C755] px-4 text-sm font-semibold text-[#06C755]"
+        >
+          メニュー・料金を管理する
         </Link>
 
         <div className="mb-6 flex items-center justify-between">
