@@ -75,9 +75,16 @@ export default function AdminFaqListPage() {
 
         <Link
           href="/admin/menus"
-          className="mb-6 flex h-11 w-full items-center justify-center rounded-md border border-[#06C755] px-4 text-sm font-semibold text-[#06C755]"
+          className="mb-3 flex h-11 w-full items-center justify-center rounded-md border border-[#06C755] px-4 text-sm font-semibold text-[#06C755]"
         >
           メニュー・料金を管理する
+        </Link>
+
+        <Link
+          href="/admin/conversations"
+          className="mb-6 flex h-11 w-full items-center justify-center rounded-md border border-[#06C755] px-4 text-sm font-semibold text-[#06C755]"
+        >
+          会話ログを見る
         </Link>
 
         <div className="mb-6 flex items-center justify-between">
