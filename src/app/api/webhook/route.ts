@@ -42,8 +42,6 @@ export async function POST(req: NextRequest) {
             menus
           );
 
-          console.log('confidence:', confidence, 'message:', userMessage);
-
           const replyMessage: messagingApi.TextMessage = {
             type: "text",
             text: answer,
