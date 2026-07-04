@@ -19,3 +19,15 @@ create table conversations (
   is_resolved boolean default true,
   created_at timestamp with time zone default now()
 );
+
+-- メニュー・料金テーブル
+create table menus (
+  id uuid default gen_random_uuid() primary key,
+  name text not null,
+  price integer not null,
+  duration_min integer not null,
+  note text,
+  is_active boolean default true,
+  created_at timestamp with time zone default now(),
+  updated_at timestamp with time zone default now()
+);
