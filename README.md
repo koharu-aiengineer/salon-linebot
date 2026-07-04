@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 美容室向け LINE bot
 
-## Getting Started
+## 概要
+個人経営の美容室向けLINE自動応答botです。
+よくある質問への自動回答、オーナーへの通知、
+お知らせ一斉配信、管理画面を備えています。
 
-First, run the development server:
+## 機能
+- FAQ自動応答（OpenAI gpt-4o-mini）
+- 確信度判定（high/medium/low）
+- 答えられない質問はオーナーにLINE通知
+- お知らせ一斉配信
+- 管理画面（FAQ・メニュー・会話ログ管理）
 
+## 技術スタック
+- Next.js 16 (App Router) / TypeScript / Tailwind CSS
+- LINE Messaging API
+- OpenAI API (gpt-4o-mini)
+- Supabase
+- Vercel
+
+## 画面
+
+### LINE自動応答
+![LINE自動応答](docs/images/line-chat.png)
+
+### 管理画面トップ
+![管理画面トップ](docs/images/admin-top.png)
+
+### FAQ一覧
+![FAQ一覧](docs/images/admin-faq.png)
+
+### お知らせ配信
+![お知らせ配信](docs/images/admin-broadcast.png)
+
+### 会話ログ
+![会話ログ](docs/images/admin-logs.png)
+
+## 公開URL
+https://salon-bot-dev.vercel.app
+
+## 環境変数
+| 変数名 | 説明 |
+|---|---|
+| LINE_CHANNEL_ACCESS_TOKEN | LINEチャネルアクセストークン |
+| LINE_CHANNEL_SECRET | LINEチャネルシークレット |
+| OPENAI_API_KEY | OpenAI APIキー |
+| NEXT_PUBLIC_SUPABASE_URL | SupabaseプロジェクトURL |
+| NEXT_PUBLIC_SUPABASE_ANON_KEY | Supabase anonキー |
+| SUPABASE_SERVICE_ROLE_KEY | Supabaseサービスロールキー（サーバー専用） |
+| OWNER_LINE_USER_ID | 未回答通知の送信先（オーナーのLINE userId） |
+
+## ドキュメント
+- [運用マニュアル（オーナー向け）](docs/manual.md)
+- [セットアップ手順書（引き継ぎ用）](docs/setup.md)
+- [技術ドキュメント](docs/technical.md)
+
+## 開発環境の起動
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+詳細は [docs/setup.md](docs/setup.md) を参照してください。
